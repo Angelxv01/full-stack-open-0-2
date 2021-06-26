@@ -1,0 +1,7 @@
+browser->server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+note over browser
+the browser js create the entry,
+make a request to the server
+with the data in payload
+end note
+server-->browser: response application/json
