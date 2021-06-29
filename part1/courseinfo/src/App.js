@@ -40,7 +40,7 @@ const Content = ({ content }) => {
   return (
     <div>
       {
-        content.map((obj) => <Part part={`${obj.name} ${obj.exercises}`} />)
+        content.map((obj) => <Part key={obj.name} part={`${obj.name} ${obj.exercises}`} />)
       }
     </div>
   )
