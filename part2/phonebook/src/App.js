@@ -1,14 +1,12 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import axios from 'axios'
+
 import Filter from './components/Filter'
 import AddPerson from './components/AddPerson'
 import Person from './components/Person'
+
 const App = () => {
-  const [persons, setPersons] = useState([
-    { name: 'Arto Hellas', number: '040-123456' },
-    { name: 'Ada Lovelace', number: '39-44-5323523' },
-    { name: 'Dan Abramov', number: '12-43-234345' },
-    { name: 'Mary Poppendieck', number: '39-23-6423122' }
-  ])
+  const [persons, setPersons] = useState([])
 
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setnewNumber ] = useState('')
@@ -37,6 +35,12 @@ const App = () => {
     setPersons([...persons, {name, number}])
   }
 
+  useEffect(() => {
+    axios
+      .get("http://localhost:3001/persons")
+      .then((response) => setPersons(response.data))
+  }, [])
+
   return (
     <div>
       <h2>Phonebook</h2>
@@ -58,7 +62,7 @@ const App = () => {
             )
           : persons
         ).map((person) => 
-          <Person key={person.name} person={person} />
+          <Person key={person.id} person={person} />
         )
       }
     </div>
