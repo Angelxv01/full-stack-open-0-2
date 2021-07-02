@@ -1,17 +1,16 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
+
+import Search from './components/Search'
 import Countries from "./components/Countries"
 
 const App = () => {
   const [countries, setCountries] = useState([])
-  const [filterCountries, setFilterCountries] = useState(countries)
   const [filter, setFilter] = useState("")
 
-  const getFilterCountries = () => {
-    const result = countries.filter((country) => country.name.toLowerCase().indexOf(filter) !== -1)
-    setFilterCountries(result)
-  }
-
+  const filterCountries = filter.length > 1
+    ? countries.filter((country) => country.name.toLowerCase().indexOf(filter) !== -1)
+    : countries
 
   useEffect(() => {
     axios
@@ -21,17 +20,33 @@ const App = () => {
       })
   }, [])
 
-  useEffect(getFilterCountries, [filter, countries])
-
-  const handleFilter = (event) => setFilter(event.target.value)
-
   return (
     <div>
-      find countries <input type="text" value={filter} onChange={handleFilter} />
-      <Countries countries={filterCountries} filter={filter} setFilter={setFilter} />
+      <Search filter={filter} setFilter={setFilter} />
+      <Countries
+        countries={filterCountries}
+        filter={filter}
+        setFilter={setFilter}
+      />
     </div>
   )
 }
+
+// const Search = ({ filter, setFilter }) => {
+
+//   const handleFilter = (event) => {
+//     setFilter(event.target.value)
+//   }
+//   return (
+//     <>
+//       find countries 
+//       <input type="text"
+//         value={filter} 
+//         onChange={handleFilter}
+//       />
+//     </>
+//   )
+// }
 
 export default App
 
