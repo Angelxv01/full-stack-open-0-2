@@ -16,10 +16,10 @@ code {
     monospace;
 }
 
-.message {
+.success {
   font-size: 1.25rem;
   border: rgb(7, 182, 7) 0.125em solid;
-  padding: 0.5em;
+  padding: 0.25em;
   margin: 0.5em;
   border-radius: 6px;
 }
@@ -27,7 +27,7 @@ code {
 .error {
   font-size: 1.25rem;
   border: rgb(255, 30, 30) 0.125em solid;
-  padding: 0.5em;
+  padding: 0.25em;
   margin: 0.5em;
   border-radius: 6px;
 }

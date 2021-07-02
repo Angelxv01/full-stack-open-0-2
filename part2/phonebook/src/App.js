@@ -6,87 +6,16 @@ import Filter from './components/Filter'
 import AddPerson from './components/AddPerson'
 import Person from './components/Person'
 import Message from './components/Message'
-import Error from "./components/Error"
 
 import personsService from './services/persons'
 
 const App = () => {
   const [persons, setPersons] = useState([])
-
   const [newName, setNewName] = useState('')
   const [newNumber, setnewNumber] = useState('')
   const [newFilter, setnewFilter] = useState('')
   const [message, setMessage] = useState(null)
-  const [error, setError] = useState(null)
 
-  const handleNewName = (event) => setNewName(event.target.value)
-  const handleNewNumber = (event) => setnewNumber(event.target.value)
-  const handleNewFilter = (event) => setnewFilter(event.target.value.toLowerCase())
-
-  const handleDeletePerson = (id) => {
-    personsService
-      .deletePerson(id)
-      .then(() => setPersons(persons.filter((person) => person.id !== id)))
-      .catch((err) => handleError(persons.find((person) => person.id === id).name))
-  }
-
-  const handleUpdatePerson = (currentPerson, number) => {
-    if (
-      !window.confirm(`${currentPerson.name} is already to phonebook, replace the old number with a new one?`)
-    ) return
-    personsService
-      .update(currentPerson.id, { ...currentPerson, number })
-      .then((response) => {
-        setPersons(
-          persons.map(
-            (person) =>
-              person.id === currentPerson.id
-                ? response
-                : person
-          )
-        )
-        handleMessage("Udpdated", currentPerson.name)
-      })
-      .catch((error) => handleError(currentPerson.name))
-  }
-
-  const handleMessage = (type, name) => {
-    setMessage(`${type} ${name}`)
-    setTimeout(() => {
-      setMessage(null)
-    }, 10000);
-  }
-  const handleError = (name) => {
-    setError(`Information of ${name} has already been removed from server`)
-    setTimeout(() => {
-      setError(null)
-    }, 10000);
-  }
-
-  const addPerson = (event) => {
-    event.preventDefault()
-    const name = newName
-    const number = newNumber
-
-    setNewName('')
-    setnewNumber('')
-    const index = persons.findIndex((person) => person.name === name)
-    if (index !== -1) {
-      handleUpdatePerson(persons[index], number)
-      return
-    }
-    if (!name || !number) {
-      alert(`Empty values not allowed`)
-      return
-    }
-
-    personsService
-      .create({ name, number })
-      .then((person) => {
-        setPersons([...persons, person])
-        handleMessage("Added", person.name)
-      })
-  }
 
   useEffect(() => {
     personsService
@@ -94,11 +23,96 @@ const App = () => {
       .then((persons) => setPersons(persons))
   }, [])
 
+  const handleNewName = (event) => setNewName(event.target.value)
+  const handleNewNumber = (event) => setnewNumber(event.target.value)
+  const handleNewFilter = (event) => setnewFilter(event.target.value)
+
+  const handleDeletePerson = (id) => {
+    const personToDelete = persons.find((person) => person.id === id)
+    const confirmToDelete = window.confirm(`Delete ${personToDelete.name}`)
+    if (!confirmToDelete) return
+
+    personsService
+      .deletePerson(id)
+      .then(() => {
+        setPersons(persons.filter((person) => person.id !== id))
+        handleMessage(`Deleted ${personToDelete.name}`)
+      })
+      .catch((err) => {
+        handleMessage(`${personToDelete.name} had already been removed`, 'error')
+      })
+  }
+
+  const handleUpdatePerson = (existPerson, number) => {
+    personsService
+      .update(existPerson.id, { ...existPerson, number })
+      .then((response) =>
+        setPersons(
+          persons.map(
+            (person) =>
+              existPerson.id === person.id
+                ? response
+                : person
+          )
+        )
+      )
+      .catch((error) => handleMessage("Some error occured", "error"))
+  }
+
+  const handleMessage = (message, type = "success") => {
+    setMessage({ type, message })
+    setTimeout(() => {
+      setMessage(null)
+    }, 3000);
+  }
+
+  const addPerson = (event) => {
+    event.preventDefault()
+
+    const name = newName
+    const number = newNumber
+
+
+    if (!name || !number) {
+      alert(`Empty values not allowed`)
+      return null
+    }
+
+    const personExist = persons.find((person) => person.name === name)
+    if (personExist) {
+      const confirmChange = window.confirm(`${personExist.name} is already to phonebook, replace the old number with a new one?`)
+      if (confirmChange) {
+        handleUpdatePerson(personExist, number)
+        handleMessage(`Changed number of  ${personExist.name}`)
+        setNewName('')
+        setnewNumber('')
+      }
+      return
+    }
+
+    personsService
+      .create({ name, number })
+      .then((person) => {
+        setPersons([...persons, person])
+        handleMessage(`Added ${person.name}`)
+        setNewName('')
+        setnewNumber('')
+      })
+      .catch((error) => handleMessage(`${error.response.data.error} `, 'error'))
+  }
+
+  const peopleToShow = newFilter.length > 0
+    ? persons.filter(
+      (person) =>
+        person.name.toLowerCase().includes(newFilter)
+    )
+    : persons
+
   return (
     <div>
-      <Message message={message} />
-      <Error message={error} />
       <h2>Phonebook</h2>
+      <Message message={message} />
+      filter shown with
       <Filter filter={newFilter} handleNewFilter={handleNewFilter} />
       <h2>add a new</h2>
       <AddPerson
@@ -110,14 +124,12 @@ const App = () => {
       />
       <h2>Numbers</h2>
       {
-        (newFilter
-          ? persons.filter(
-            (person) =>
-              person.name.toLowerCase().includes(newFilter)
-          )
-          : persons
-        ).map((person) =>
-          <Person key={person.id} person={person} handleDeletePerson={handleDeletePerson} />
+        peopleToShow.map((person) =>
+          <Person
+            key={person.id}
+            person={person}
+            handleDeletePerson={handleDeletePerson}
+          />
         )
       }
     </div>
