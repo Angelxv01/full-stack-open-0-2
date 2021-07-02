@@ -1,8 +1,12 @@
+import "./index.css"
+
 import React, { useState, useEffect } from 'react'
 
 import Filter from './components/Filter'
 import AddPerson from './components/AddPerson'
 import Person from './components/Person'
+import Message from './components/Message'
+import Error from "./components/Error"
 
 import personsService from './services/persons'
 
@@ -12,6 +16,8 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setnewNumber] = useState('')
   const [newFilter, setnewFilter] = useState('')
+  const [message, setMessage] = useState(null)
+  const [error, setError] = useState(null)
 
   const handleNewName = (event) => setNewName(event.target.value)
   const handleNewNumber = (event) => setnewNumber(event.target.value)
@@ -21,6 +27,7 @@ const App = () => {
     personsService
       .deletePerson(id)
       .then(() => setPersons(persons.filter((person) => person.id !== id)))
+      .catch((err) => handleError(persons.find((person) => person.id === id).name))
   }
 
   const handleUpdatePerson = (currentPerson, number) => {
@@ -38,7 +45,22 @@ const App = () => {
                 : person
           )
         )
+        handleMessage("Udpdated", currentPerson.name)
       })
+      .catch((error) => handleError(currentPerson.name))
+  }
+
+  const handleMessage = (type, name) => {
+    setMessage(`${type} ${name}`)
+    setTimeout(() => {
+      setMessage(null)
+    }, 10000);
+  }
+  const handleError = (name) => {
+    setError(`Information of ${name} has already been removed from server`)
+    setTimeout(() => {
+      setError(null)
+    }, 10000);
   }
 
   const addPerson = (event) => {
@@ -60,7 +82,10 @@ const App = () => {
 
     personsService
       .create({ name, number })
-      .then((person) => setPersons([...persons, person]))
+      .then((person) => {
+        setPersons([...persons, person])
+        handleMessage("Added", person.name)
+      })
   }
 
   useEffect(() => {
@@ -71,6 +96,8 @@ const App = () => {
 
   return (
     <div>
+      <Message message={message} />
+      <Error message={error} />
       <h2>Phonebook</h2>
       <Filter filter={newFilter} handleNewFilter={handleNewFilter} />
       <h2>add a new</h2>
