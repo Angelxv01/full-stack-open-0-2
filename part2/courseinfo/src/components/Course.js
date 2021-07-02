@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Course = ({course}) => {
+const Course = ({ course }) => {
   return (
     <>
       <Header course={course} />
@@ -19,7 +19,7 @@ const Header = ({ course }) => {
 const Total = ({ course }) => {
   const sum = course.parts.reduce((sum, part) => sum + part.exercises, 0)
   return (
-    <p><b>Number of exercises {sum}</b></p>
+    <p><strong>Number of exercises {sum}</strong></p>
   )
 }
 
@@ -35,7 +35,9 @@ const Content = ({ course }) => {
   return (
     <div>
       {
-        course.parts.map((part) => <Part key={part.id} part={part} />)
+        course.parts.map((part) =>
+          <Part key={part.id} part={part} />
+        )
       }
     </div>
   )
