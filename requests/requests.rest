@@ -8,7 +8,7 @@ Content-Type: application/json
 
 ###
 
-PUT http://localhost:3001/api/persons/60ed6d041259483a5ce624b2
+PUT http://localhost:3001/api/persons/
 Content-Type: application/json
 
 {
@@ -22,8 +22,8 @@ GET http://localhost:3001/api/persons
 
 ###
 
-DELETE http://localhost:3001/api/persons/60ed6d041259483a5ce624b2
+DELETE http://localhost:3001/api/persons/
 
 ###
 
-GET http://localhost:3001/api/persons/60ed6cb5daf7de24300bd64c
+GET http://localhost:3001/api/persons/
