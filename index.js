@@ -26,16 +26,18 @@ const errorHandler = (err, req, res, next) => {
   next(err)
 }
 
-app.get('/api/persons', (req, res) =>
-  Person.find({}).then((people) => res.json(people))
-)
-
 app.get('/info', (req, res) =>
   Person.find({}).then((people) =>
     res.send(
-      `<p>Phonebook has info for ${people.length} people</p><br>${new Date()}`
+      `<p>Phonebook has info for ${people.length} people</p>
+      <br>
+      ${new Date()}`
     )
   )
+)
+
+app.get('/api/persons', (req, res) =>
+  Person.find({}).then((people) => res.json(people))
 )
 
 app.post('/api/persons', (req, res, next) => {
@@ -98,5 +100,4 @@ app.use((req, res) => res.status(404).send('invalid route'))
 app.use(errorHandler)
 
 const PORT = process.env.PORT || 3001
-
 app.listen(PORT, () => console.log(`Listening on port ${PORT}`))
