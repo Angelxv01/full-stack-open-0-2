@@ -5,5 +5,6 @@ const MONGODB_API =
     ? process.env.MONGODB_API
     : process.env.MONGODB_API_TEST
 const PORT = process.env.PORT
+const SECRET = process.env.SECRET
 
-module.exports = { MONGODB_API, PORT }
+module.exports = { MONGODB_API, PORT, SECRET }

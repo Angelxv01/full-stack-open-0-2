@@ -14,13 +14,16 @@ const unknownEndpoint = (req, res) => {
 
 const errorHandler = (err, req, res, next) => {
   logger.Error(err.message)
-
-  if (err.name === 'CastError') {
-    return res.status(400).send({ error: 'malformed id' })
-  } else if (err.name === 'ValidationError') {
-    return res.status(400).json({ error: err.message })
+  switch (err.name) {
+    case 'CastError':
+      return res.status(400).send({ error: 'malformed id' })
+    case 'ValidationError':
+      return res.status(400).json({ error: err.message })
+    case 'JsonWebTokenError':
+      return res.status(401).json({ error: 'invalid token' })
+    case 'TokenExpiredError':
+      return res.status(401).json({ error: 'token expired' })
   }
-
   next(err)
 }
 
