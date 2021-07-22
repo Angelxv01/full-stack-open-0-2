@@ -1,18 +1,31 @@
 POST http://localhost:3001/api/blogs
 Content-Type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsVCJ9.eyJ1c2VybmFtZSI6IkFuZ2VsIiwiaWQiOiI2MGY2YmIxZDQyZmVlYjI5YjgyNDM2YWMiLCJpYXQiOjE2MjY4NjExNjd9.i9efo_uC2E8BdyGu9DgFUmFsDfPSps5FEs_MfuaMFW4
+Authorization: bearer 
 
 {
-    "title": "This is my second post",
+    "title": "Testing refactor",
     "author": "Angelxv01",
     "url": "dummy url 2",
     "likes": 10, 
-    "userId": "60f6bb1d42feeb29b82436ac"
+    "userId": ""
+}
+
+###
+POST http://localhost:3001/api/blogs
+Content-Type: application/json
+Authorization: bearer 
+
+{
+    "title": "Testing refactor",
+    "author": "Jessy",
+    "url": "dummy url 2",
+    "likes": 10, 
+    "userId": ""
 }
 
 ###
 
-PUT http://localhost:3001/api/blogs/60f51daacb32631e30c4455
+PUT http://localhost:3001/api/blogs/
 Content-Type: application/json
 
 {
@@ -27,3 +40,4 @@ GET http://localhost:3001/api/blogs
 ###
 
 DELETE http://localhost:3001/api/blogs/
+Authorization: bearer 
