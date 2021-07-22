@@ -13,6 +13,7 @@ beforeEach(async () => {
   const blogsObject = helper.blogs.map((blog) => new Blog(blog))
   const promiseBuffer = blogsObject.map((blog) => blog.save())
   await Promise.all(promiseBuffer)
+  await helper.createUser()
 }, 100000)
 
 describe('API GET /', () => {
@@ -33,8 +34,12 @@ describe('API GET /', () => {
   })
 })
 
-describe('API POST /', () => {
+describe.only('API POST /', () => {
   test('valid post', async () => {
+    const token = await api
+      .post('/api/login')
+      .send({ username: 'root', password: 'password' })
+
     const blog = {
       title: 'different message since before',
       author: 'Angelxv01',
@@ -44,6 +49,7 @@ describe('API POST /', () => {
 
     await api
       .post('/api/blogs')
+      .set('Authorization', `bearer ${token.body.token}`)
       .send(blog)
       .expect(200)
       .expect('Content-Type', /application\/json/)
@@ -57,6 +63,10 @@ describe('API POST /', () => {
   })
 
   test('valid post without likes', async () => {
+    const token = await api
+      .post('/api/login')
+      .send({ username: 'root', password: 'password' })
+
     const blog = {
       title: 'different message since before',
       author: 'Angelxv01',
@@ -65,6 +75,7 @@ describe('API POST /', () => {
 
     const response = await api
       .post('/api/blogs')
+      .set('Authorization', `bearer ${token.body.token}`)
       .send(blog)
       .expect(200)
       .expect('Content-Type', /application\/json/)
@@ -76,8 +87,24 @@ describe('API POST /', () => {
     const blog = {
       author: 'Angelxv01'
     }
+    const token = await api
+      .post('/api/login')
+      .send({ username: 'root', password: 'password' })
 
-    await api.post('/api/blogs').send(blog).expect(400)
+    await api
+      .post('/api/blogs')
+      .set('Authorization', `bearer ${token.body.token}`)
+      .send(blog)
+      .expect(400)
+  })
+  test('no jwt provided', async () => {
+    const blog = {
+      title: 'different message since before',
+      author: 'Angelxv01',
+      url: 'still_fake_url',
+      likes: 1
+    }
+    await api.post('/api/blogs').send(blog).expect(401)
   })
 })
 
@@ -112,7 +139,7 @@ describe('API PUT /:id', () => {
       .expect(200)
       .expect('Content-Type', /application\/json/)
 
-    const updatedBlog = await helper.findById(blogToUpdate.id)
+    const updatedBlog = await helper.findBlogById(blogToUpdate.id)
     expect(updatedBlog).toEqual(expect.objectContaining(updatedInfo))
   })
 

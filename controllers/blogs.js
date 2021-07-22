@@ -1,4 +1,4 @@
-const logger = require('../utils/logger')
+// const logger = require('../utils/logger')
 const { userExtractor } = require('../utils/middleware')
 const blogsRouter = require('express').Router()
 
@@ -13,7 +13,6 @@ blogsRouter.get('/', async (req, res) => {
 
 blogsRouter.post('/', userExtractor, async (req, res) => {
   const body = req.body
-
   const user = req.user
 
   if (!(body.title && body.url)) {
@@ -50,20 +49,29 @@ blogsRouter.delete('/:id', userExtractor, async (req, res) => {
   res.status(204).end()
 })
 
-blogsRouter.put('/:id', async (req, res) => {
+blogsRouter.put('/:id', userExtractor, async (req, res) => {
   const body = req.body
+  const user = req.user
+  const blogId = req.params.id
 
   if (!(body.likes && body.title)) {
     return res.status(400).json({ error: 'Missing content' }).end()
   }
 
+  const blogToUpdate = await Blog.findById(blogId)
+
+  if (user._id.toString() !== blogToUpdate.user.toString()) {
+    return res.status(401).json({
+      error: 'creator id is different from token id'
+    })
+  }
+
   const blog = await Blog.findByIdAndUpdate(
-    req.params.id,
+    blogId,
     { title: body.title, likes: body.likes },
     { new: true }
   )
 
-  logger.Info(blog)
   res.json(blog.toJSON())
 })
 module.exports = blogsRouter

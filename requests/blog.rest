@@ -6,8 +6,7 @@ Authorization: bearer
     "title": "Testing refactor",
     "author": "Angelxv01",
     "url": "dummy url 2",
-    "likes": 10, 
-    "userId": ""
+    "likes": 10
 }
 
 ###
@@ -27,6 +26,7 @@ Authorization: bearer
 
 PUT http://localhost:3001/api/blogs/
 Content-Type: application/json
+Authorization: bearer 
 
 {
     "title": "This is my third post",
