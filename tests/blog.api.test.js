@@ -2,7 +2,6 @@ const mongoose = require('mongoose')
 const supertest = require('supertest')
 
 const app = require('../app')
-// const logger = require('../utils/logger')
 const Blog = require('../models/blog')
 const helper = require('./test_helper')
 
@@ -34,7 +33,7 @@ describe('API GET /', () => {
   })
 })
 
-describe.only('API POST /', () => {
+describe('API POST /', () => {
   test('valid post', async () => {
     const token = await api
       .post('/api/login')
@@ -51,7 +50,7 @@ describe.only('API POST /', () => {
       .post('/api/blogs')
       .set('Authorization', `bearer ${token.body.token}`)
       .send(blog)
-      .expect(200)
+      .expect(201)
       .expect('Content-Type', /application\/json/)
 
     const blogs = await helper.blogsInDb()
@@ -77,7 +76,7 @@ describe.only('API POST /', () => {
       .post('/api/blogs')
       .set('Authorization', `bearer ${token.body.token}`)
       .send(blog)
-      .expect(200)
+      .expect(201)
       .expect('Content-Type', /application\/json/)
 
     expect(response.body.likes).toBe(0)

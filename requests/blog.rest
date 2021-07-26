@@ -3,14 +3,14 @@ Content-Type: application/json
 Authorization: bearer 
 
 {
-    "title": "Testing refactor",
-    "author": "Angelxv01",
+    "title": "Testing refactor 2",
+    "author": "Angel",
     "url": "dummy url 2",
     "likes": 10
 }
 
 ###
-POST http://localhost:3001/api/blogs
+POST http://localhost:3001/api/blogs/
 Content-Type: application/json
 Authorization: bearer 
 
@@ -29,8 +29,8 @@ Content-Type: application/json
 Authorization: bearer 
 
 {
-    "title": "This is my third post",
-    "likes": 111
+    "title": "Testing refactor",
+    "likes": 143
 }
 
 ###

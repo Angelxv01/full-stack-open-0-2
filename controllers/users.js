@@ -1,4 +1,3 @@
-const logger = require('../utils/logger')
 const usersRouter = require('express').Router()
 const bcrypt = require('bcryptjs')
 
@@ -11,13 +10,12 @@ usersRouter.get('/', async (req, res) => {
     author: 1,
     id: 1
   })
-  res.json(users)
+  res.json(users.toJSON())
 })
 
 usersRouter.post('/', async (req, res) => {
   const body = req.body
 
-  logger.Info(body)
   if (body === undefined) {
     return res.status(400).json({ error: 'missing body' })
   }
@@ -35,7 +33,7 @@ usersRouter.post('/', async (req, res) => {
   })
 
   const savedUser = await user.save()
-  res.json(savedUser)
+  res.json(savedUser.toJSON())
 })
 
 module.exports = usersRouter
