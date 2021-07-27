@@ -10,7 +10,7 @@ usersRouter.get('/', async (req, res) => {
     author: 1,
     id: 1
   })
-  res.json(users.toJSON())
+  res.json(users.map((user) => user.toJSON()))
 })
 
 usersRouter.post('/', async (req, res) => {

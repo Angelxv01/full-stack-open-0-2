@@ -13,7 +13,7 @@ const userExtractor = async (req, res, next) => {
   }
 
   const user = await User.findById(decodedToken.id)
-  req.user = user.toJSON()
+  req.user = user
   next()
 }
 
@@ -29,6 +29,7 @@ blogsRouter.use(userExtractor)
 blogsRouter.post('/', async (req, res) => {
   const body = req.body
   const user = req.user
+  console.log(user)
 
   if (!(body.title && body.url)) {
     return res.status(400).json({ error: 'Missing content' }).end()
