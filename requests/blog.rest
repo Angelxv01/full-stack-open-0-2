@@ -1,6 +1,6 @@
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFuZ2VsIiwiaWQiOiI2MTAxNTczODFiMjYyMTMyMTg0Mzg2YzQiLCJpYXQiOjE2Mjc0Nzc4MzksImV4cCI6MTYyNzQ4MTQzOX0.UBfEM40wRd-DkdgDWSj_BpjrRdiz002IpgTZqCF_MWQ
+Authorization: bearer 
 
 {
     "title": "Testing refactor 1",
@@ -23,7 +23,7 @@ Authorization: bearer
 
 ###
 
-PUT http://localhost:3003/api/blogs/610157bd1b262132184386dd
+PUT http://localhost:3003/api/blogs/
 Content-Type: application/json
 Authorization: bearer 
 
