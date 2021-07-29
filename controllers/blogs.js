@@ -50,7 +50,7 @@ blogsRouter.post('/', async (req, res) => {
   if (!body.likes) {
     blog.likes = 0
   }
-  blog.user = user.id
+  blog.user = user
 
   const result = await blog.save()
   user.blogs = user.blogs.concat(result.id)
