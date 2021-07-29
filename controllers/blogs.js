@@ -24,6 +24,16 @@ blogsRouter.get('/', async (req, res) => {
   res.json(blogs.map((blog) => blog.toJSON()))
 })
 
+blogsRouter.put('/:id', async (req, res) => {
+  const blog = req.body
+
+  const updatedBlog = await Blog.findByIdAndUpdate(req.params.id, blog, {
+    new: true
+  })
+  console.log(updatedBlog)
+  res.json(updatedBlog.toJSON())
+})
+
 blogsRouter.use(userExtractor)
 
 blogsRouter.post('/', async (req, res) => {
@@ -66,28 +76,4 @@ blogsRouter.delete('/:id', async (req, res) => {
   res.status(204).end()
 })
 
-blogsRouter.put('/:id', async (req, res) => {
-  const body = req.body
-  const user = req.user
-  const blogId = req.params.id
-
-  if (!(body.likes && body.title)) {
-    return res.status(400).json({ error: 'Missing content' }).end()
-  }
-
-  const blogToUpdate = await Blog.findById(blogId)
-  if (user.id.toString() !== blogToUpdate.user.toString()) {
-    return res.status(401).json({
-      error: 'only creator can edit blog'
-    })
-  }
-
-  const blog = await Blog.findByIdAndUpdate(
-    blogId,
-    { title: body.title, likes: body.likes },
-    { new: true }
-  )
-
-  res.json(blog.toJSON())
-})
 module.exports = blogsRouter
