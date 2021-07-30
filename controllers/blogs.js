@@ -40,7 +40,6 @@ blogsRouter.use(userExtractor)
 blogsRouter.post('/', async (req, res) => {
   const body = req.body
   const user = req.user
-  console.log(user)
 
   if (!(body.title && body.url)) {
     return res.status(400).json({ error: 'Missing content' }).end()
@@ -73,7 +72,7 @@ blogsRouter.delete('/:id', async (req, res) => {
   await blog.remove()
   blogId = blogId.toString()
   user.blogs = user.blogs.filter((blog) => blog.id.toString() !== blogId)
-  user.save()
+  await user.save()
   res.status(204).end()
 })
 
