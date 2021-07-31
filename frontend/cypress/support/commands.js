@@ -1,4 +1,4 @@
-Cypress.Commands.add('login', ({ username, password }) => {
+Cypress.Commands.add('login', function ({ username, password }) {
   cy.request('POST', 'http://localhost:3003/api/login', {
     username,
     password

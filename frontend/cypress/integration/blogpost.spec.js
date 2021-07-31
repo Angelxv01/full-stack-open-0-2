@@ -52,7 +52,7 @@ describe('Blog app', function () {
         .and('have.css', 'border-color', 'rgb(7, 182, 7)')
     })
 
-    it.only('User can like a blog', function () {
+    it('User can like a blog', function () {
       cy.addBloglist({
         author: 'Angel',
         url: 'dummy',
@@ -61,6 +61,39 @@ describe('Blog app', function () {
       cy.get('.toggleShow').click()
       cy.get('.like').click()
       cy.get('.like').parent().contains('1')
+    })
+
+    it('User can delete post he created', function () {
+      cy.addBloglist({
+        author: 'Angel',
+        url: 'dummy',
+        title: 'Third test with cypress'
+      })
+      cy.get('.toggleShow').click()
+      cy.get('.remove').click()
+      cy.contains('Third test with cypress').should('not.exist')
+    })
+
+    it('User cannot delete post he did not created', function () {
+      const user = {
+        username: 'dummy',
+        name: 'dummy',
+        password: 'dummy'
+      }
+      cy.request('POST', 'http://localhost:3003/api/users', user)
+
+      cy.addBloglist({
+        author: 'Angel',
+        url: 'dummy',
+        title: 'Third test with cypress'
+      })
+      cy.contains('log out').click()
+
+      cy.login({ username: 'dummy', password: 'dummy' })
+
+      // assuming there's only one blog and dummy isn't the creator
+      cy.get('.toggleShow').click()
+      cy.get('.remove').should('not.exist')
     })
   })
 })

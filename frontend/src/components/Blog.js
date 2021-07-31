@@ -52,7 +52,11 @@ const Blog = ({ blog, putLike, removeBlog, isCreator }) => {
           </button>
         </div>
         <div>{blog.user.username}</div>
-        {isCreator && <button onClick={handleRemove}>remove</button>}
+        {isCreator && (
+          <button onClick={handleRemove} className="remove">
+            remove
+          </button>
+        )}
       </div>
     </div>
   )
