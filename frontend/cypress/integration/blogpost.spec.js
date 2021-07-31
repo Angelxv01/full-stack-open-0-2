@@ -1,3 +1,5 @@
+import { string } from 'prop-types'
+
 describe('Blog app', function () {
   beforeEach(function () {
     cy.request('POST', 'http://localhost:3003/api/testing/reset')
@@ -94,6 +96,36 @@ describe('Blog app', function () {
       // assuming there's only one blog and dummy isn't the creator
       cy.get('.toggleShow').click()
       cy.get('.remove').should('not.exist')
+    })
+
+    it.only('Should see ordered post', function () {
+      cy.addBloglist({
+        title: 'Order 3',
+        likes: '1',
+        author: 'Angel',
+        url: 'dummy'
+      })
+      cy.addBloglist({
+        title: 'Order 1',
+        likes: '10',
+        author: 'Angel',
+        url: 'dummy'
+      })
+      cy.addBloglist({
+        title: 'Order 2',
+        likes: '5',
+        author: 'Angel',
+        url: 'dummy'
+      })
+
+      cy.get('.base').then(function (blogs) {
+        cy.wrap(blogs).should(
+          'equal',
+          blogs.sort(function (a, b) {
+            return b.likes - a.likes
+          })
+        )
+      })
     })
   })
 })
