@@ -25,8 +25,8 @@ const App = () => {
     try {
       const user = await loginService.login(credentials)
       setUser(user)
-      window.localStorage.setItem('loggedUser', JSON.stringify(user))
       blogService.setToken(user.token)
+      window.localStorage.setItem('loggedUser', JSON.stringify(user))
     } catch (error) {
       handleMessage(error.response.data.error, 'error')
     }
@@ -70,16 +70,14 @@ const App = () => {
   }, [])
 
   useEffect(() => {
-    const loggedUser = window.localStorage.getItem('loggedUser')
-    if (!loggedUser) {
-      return logout()
+    const loggedUserJSON = window.localStorage.getItem('loggedUser')
+    if (loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON)
+      blogService.setToken(user.token)
+      const { exp } = decode(user.token)
+      const expired = Date.now() >= exp * 1000 - 60000
+      expired ? logout() : setUser(user)
     }
-    const user = JSON.parse(loggedUser)
-
-    const { exp } = decode(user.token)
-    const expired = Date.now() >= exp * 1000 - 60000
-    console.log('is expired', expired)
-    expired ? logout() : setUser(user)
   }, [])
 
   if (user === null) {
