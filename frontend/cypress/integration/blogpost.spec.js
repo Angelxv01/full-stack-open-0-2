@@ -51,5 +51,16 @@ describe('Blog app', function () {
         .should('contain', 'a new blog First cypress test by Angel added')
         .and('have.css', 'border-color', 'rgb(7, 182, 7)')
     })
+
+    it.only('User can like a blog', function () {
+      cy.addBloglist({
+        author: 'Angel',
+        url: 'dummy',
+        title: 'Second test with cypress'
+      })
+      cy.get('.toggleShow').click()
+      cy.get('.like').click()
+      cy.get('.like').parent().contains('1')
+    })
   })
 })
