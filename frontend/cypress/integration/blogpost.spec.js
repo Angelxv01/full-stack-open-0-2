@@ -1,5 +1,3 @@
-import { string } from 'prop-types'
-
 describe('Blog app', function () {
   beforeEach(function () {
     cy.request('POST', 'http://localhost:3003/api/testing/reset')
@@ -98,7 +96,7 @@ describe('Blog app', function () {
       cy.get('.remove').should('not.exist')
     })
 
-    it.only('Should see ordered post', function () {
+    it('Should see ordered post', function () {
       cy.addBloglist({
         title: 'Order 3',
         likes: '1',
