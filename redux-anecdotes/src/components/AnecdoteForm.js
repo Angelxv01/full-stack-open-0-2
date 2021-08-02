@@ -2,7 +2,7 @@ import React from 'react'
 import { useDispatch } from 'react-redux'
 import { createAnecdote } from '../reducers/anecdoteReducer'
 
-const AddAnecdotes = () => {
+const AnecdoteForm = () => {
   const dispatch = useDispatch()
   const addAnecdote = (e) => {
     e.preventDefault()
@@ -23,4 +23,4 @@ const AddAnecdotes = () => {
   )
 }
 
-export default AddAnecdotes
+export default AnecdoteForm
