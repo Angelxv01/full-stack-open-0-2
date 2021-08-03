@@ -4,7 +4,7 @@ const reducer = (state = null, action) => {
 
   switch (action.type) {
     case 'SET_NOTIFICATION':
-      return action.body.message
+      return action.data
     case 'RESET_NOTIFICATION':
       return null
     default:
@@ -14,7 +14,7 @@ const reducer = (state = null, action) => {
 
 export const setNotification = (message) => ({
   type: 'SET_NOTIFICATION',
-  body: { message }
+  data: message
 })
 
 export const resetNotification = () => ({ type: 'RESET_NOTIFICATION' })
