@@ -12,11 +12,13 @@ const reducer = (state = null, action) => {
   }
 }
 
-export const setNotification = (message) => ({
-  type: 'SET_NOTIFICATION',
-  data: message
-})
-
-export const resetNotification = () => ({ type: 'RESET_NOTIFICATION' })
+export const setNotification = (message, seconds) => {
+  return async (dispatch) => {
+    dispatch({ type: 'SET_NOTIFICATION', data: message })
+    setTimeout(() => {
+      dispatch({ type: 'RESET_NOTIFICATION' })
+    }, seconds * 1000)
+  }
+}
 
 export default reducer
