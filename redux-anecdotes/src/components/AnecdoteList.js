@@ -1,10 +1,13 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { connect } from 'react-redux'
 import { voteAnecdote } from '../reducers/anecdoteReducer'
 import { setNotification } from '../reducers/notificationReducer'
 
 const AnecdoteList = (props) => {
+  const [id, setId] = useState(null)
+
   const filter = props.filter
+
   const anecdotes =
     filter === ''
       ? props.anecdote
@@ -14,8 +17,11 @@ const AnecdoteList = (props) => {
 
   const vote = (anecdote) => {
     props.voteAnecdote(anecdote)
-    props.setNotification(`you voted ${anecdote.content}`, 5)
+    props
+      .setNotification(`you voted ${anecdote.content}`, 5, id)
+      .then((timeId) => setId(timeId))
   }
+
   return (
     <div>
       {anecdotes
