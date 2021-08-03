@@ -14,7 +14,7 @@ const reducer = (state = null, action) => {
 
 export const setNotification = (message, seconds, id) => {
   return async (dispatch) => {
-    clearInterval(id)
+    clearTimeout(id)
     dispatch({ type: 'SET_NOTIFICATION', data: message })
     return setTimeout(() => {
       dispatch({ type: 'RESET_NOTIFICATION' })

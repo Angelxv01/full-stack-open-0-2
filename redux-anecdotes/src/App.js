@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 
 import AnecdoteForm from './components/AnecdoteForm'
 import AnecdoteList from './components/AnecdoteList'
@@ -10,6 +10,7 @@ import { useDispatch } from 'react-redux'
 
 const App = () => {
   const dispatch = useDispatch()
+  const [time, setTime] = useState(null)
   useEffect(() => {
     dispatch(initAnecdotes())
   }, [dispatch])
@@ -18,8 +19,8 @@ const App = () => {
       <Notification />
       <h2>Anecdotes</h2>
       <Filter />
-      <AnecdoteList />
-      <AnecdoteForm />
+      <AnecdoteList time={time} setTime={setTime} />
+      <AnecdoteForm time={time} setTime={setTime} />
     </div>
   )
 }

@@ -1,11 +1,9 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { connect } from 'react-redux'
 import { createAnecdote } from '../reducers/anecdoteReducer'
 import { setNotification } from '../reducers/notificationReducer'
 
 const AnecdoteForm = (props) => {
-  const [id, setId] = useState(null)
-
   const addAnecdote = (e) => {
     e.preventDefault()
     const text = e.target.anecdote.value
@@ -13,8 +11,8 @@ const AnecdoteForm = (props) => {
 
     props.createAnecdote(text)
     props
-      .setNotification(`you voted ${text}`, 5, id)
-      .then((timeId) => setId(timeId))
+      .setNotification(`you voted ${text}`, 5, props.time)
+      .then((timeId) => props.setTime(timeId))
   }
 
   return (
