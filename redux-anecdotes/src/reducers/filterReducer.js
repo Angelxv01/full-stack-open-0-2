@@ -9,5 +9,7 @@ const reducer = (state = '', action) => {
   }
 }
 
-export const setFilter = (text) => ({ type: 'SET_FILTER', data: text })
+export const setFilter = (text) => {
+  return (dispatch) => dispatch({ type: 'SET_FILTER', data: text })
+}
 export default reducer
