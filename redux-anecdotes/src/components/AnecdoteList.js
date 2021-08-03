@@ -11,9 +11,8 @@ const AnecdoteList = () => {
   const filter = useSelector(({ filter }) => filter).toLowerCase()
   const dispatch = useDispatch()
 
-  const vote = (id) => {
-    dispatch(voteAnecdote(id))
-    const anecdote = anecdotes.find((obj) => obj.id === id)
+  const vote = (anecdote) => {
+    dispatch(voteAnecdote(anecdote))
     dispatch(setNotification(`you voted ${anecdote.content}`))
     setTimeout(() => dispatch(resetNotification()), 5000)
   }
@@ -31,7 +30,7 @@ const AnecdoteList = () => {
               has {anecdote.votes}
               <button
                 onClick={() => {
-                  vote(anecdote.id)
+                  vote(anecdote)
                 }}
               >
                 vote
