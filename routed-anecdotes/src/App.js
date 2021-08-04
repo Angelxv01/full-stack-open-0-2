@@ -81,6 +81,16 @@ const CreateNew = (props) => {
   const content = useField('text')
   const author = useField('text')
   const info = useField('text')
+
+  const removeState = (o, k) => {
+    const n = Object.assign({}, o)
+    delete n[k]
+    return n
+  }
+
+  const contentState = removeState(content, 'reset')
+  const authorState = removeState(author, 'reset')
+  const infoState = removeState(info, 'reset')
   const history = useHistory()
 
   const handleSubmit = (e) => {
@@ -107,15 +117,15 @@ const CreateNew = (props) => {
       <form onSubmit={handleSubmit}>
         <div>
           content
-          <input {...content} />
+          <input {...contentState} />
         </div>
         <div>
           author
-          <input {...author} />
+          <input {...authorState} />
         </div>
         <div>
           url for more info
-          <input {...info} />
+          <input {...infoState} />
         </div>
         <button type="submit">create</button>
         <button onClick={clear}>reset</button>
