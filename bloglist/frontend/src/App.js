@@ -2,6 +2,7 @@ import './index.css'
 
 import React, { useState, useEffect, useRef } from 'react'
 import { decode } from 'jsonwebtoken'
+import { useDispatch } from 'react-redux'
 
 import Blog from './components/Blog'
 import LoginForm from './components/LoginForm'
@@ -12,12 +13,17 @@ import blogService from './services/blogs'
 import loginService from './services/login'
 import Togglable from './components/Togglable'
 
+import {
+  setNotification,
+  resetNotification
+} from './reducers/notificationReducer'
+
 const App = () => {
   const [blogs, setBlogs] = useState([])
-
   const [user, setUser] = useState(null)
+  const [time, setTime] = useState(null)
 
-  const [message, setMessage] = useState(null)
+  const dispatch = useDispatch()
 
   const addBlogpostRef = useRef()
 
@@ -40,8 +46,8 @@ const App = () => {
   }
 
   const handleMessage = (message, type = 'success') => {
-    setMessage({ type, message })
-    setTimeout(() => setMessage(null), 3000)
+    const id = dispatch(setNotification({ message, type }, 5, time))
+    setTime(id)
   }
 
   const putLike = async (id, blogToUpdate) => {
@@ -60,7 +66,7 @@ const App = () => {
 
   const logout = () => {
     window.localStorage.removeItem('loggedUser')
-    setMessage(null)
+    dispatch(resetNotification())
     setUser(null)
     blogService.setToken(null)
   }
@@ -84,7 +90,7 @@ const App = () => {
     return (
       <>
         <h2>log in to application</h2>
-        <Message message={message} />
+        <Message />
         <LoginForm handleLogin={handleLogin} />
       </>
     )
@@ -93,7 +99,7 @@ const App = () => {
   return (
     <div>
       <h2>blogs</h2>
-      <Message message={message} />
+      <Message />
       <div>
         {user.name} logged in
         <button onClick={logout}>log out</button>
