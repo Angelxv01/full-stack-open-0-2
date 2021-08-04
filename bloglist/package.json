@@ -1,0 +1,21 @@
+{
+  "name": "bloglist",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start:frontend": "cd frontend && npm start",
+    "start:backend": "cd backend && npm run start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Angelxv01/full-stack-open-2021.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Angelxv01/full-stack-open-2021/issues"
+  },
+  "homepage": "https://github.com/Angelxv01/full-stack-open-2021#readme"
+}
