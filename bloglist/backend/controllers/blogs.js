@@ -35,6 +35,20 @@ blogsRouter.put('/:id', async (req, res) => {
   res.json(updatedBlog.toJSON())
 })
 
+blogsRouter.post('/:id/comment', async (req, res) => {
+  const body = req.body
+
+  if (!body.comment) {
+    res.status(400).json({ error: 'missing content' })
+  }
+
+  const blog = await Blog.findById(req.params.id)
+  blog.comments = blog.comments.concat(body.comment)
+  await blog.save()
+
+  res.json(blog)
+})
+
 blogsRouter.use(userExtractor)
 
 blogsRouter.post('/', async (req, res) => {

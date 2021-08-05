@@ -15,6 +15,19 @@ const BlogPost = ({ blog, putLike }) => {
     putLike(blog.id, data)
   }
 
+  const Comments = () => {
+    let counter = 0
+    return (
+      <div>
+        <ul>
+          {blog.comments.map((comment) => {
+            counter++
+            return <li key={counter}>{comment}</li>
+          })}
+        </ul>
+      </div>
+    )
+  }
   return (
     <div>
       <h1>{blog.title}</h1>
@@ -23,6 +36,10 @@ const BlogPost = ({ blog, putLike }) => {
       </div>
       <div>
         {blog.likes} likes <button onClick={handleLike}>Like</button>
+      </div>
+      <div>
+        <h3>comments</h3>
+        {blog.comments ? <Comments /> : 'no comments yet'}
       </div>
       <div>added by {blog.user.name}</div>
     </div>

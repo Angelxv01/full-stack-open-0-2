@@ -10,15 +10,11 @@ Authorization: bearer
 }
 
 ###
-POST http://localhost:3003/api/blogs/
+POST http://localhost:3003/api/blogs/:id/comment
 Content-Type: application/json
-Authorization: bearer 
 
 {
-    "title": "Testing refactor",
-    "author": "Jessy",
-    "url": "dummy url 2",
-    "likes": 10
+    "comment": "testing a comment"
 }
 
 ###
