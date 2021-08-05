@@ -16,18 +16,16 @@ import BlogPost from './components/BlogPost'
 
 import Togglable from './components/Togglable'
 
-import {
-  setNotification,
-  resetNotification
-} from './reducers/notificationReducer'
+import { setNotification } from './reducers/notificationReducer'
 import {
   addBlog,
   // deleteBlog,
   initBlogs,
   likeBlog
 } from './reducers/blogReducer'
-import { loadUser, loginUser, logoutUser } from './reducers/userReducer'
+import { loadUser, loginUser } from './reducers/userReducer'
 import Users from './components/Users'
+import Navigation from './components/Navigation'
 
 const App = () => {
   const [time, setTime] = useState(null)
@@ -85,11 +83,6 @@ const App = () => {
   //   }
   // }
 
-  const logout = () => {
-    dispatch(resetNotification())
-    dispatch(logoutUser())
-  }
-
   useEffect(() => {
     dispatch(initBlogs())
   }, [])
@@ -118,16 +111,9 @@ const App = () => {
 
   return (
     <div>
+      <Navigation />
       <h2>blogs</h2>
       <Message />
-      <div>
-        {user.name} logged in
-        <button onClick={logout}>log out</button>
-      </div>
-      <div>
-        <Link to="/">home</Link>
-        <Link to="/users">users</Link>
-      </div>
 
       <Switch>
         <Route path="/users/:id">
