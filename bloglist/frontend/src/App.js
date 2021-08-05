@@ -1,6 +1,7 @@
 import './index.css'
 
 import React, { useState, useEffect, useRef } from 'react'
+import { Switch, Route, Link } from 'react-router-dom'
 // import { decode } from 'jsonwebtoken'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -22,6 +23,7 @@ import {
   likeBlog
 } from './reducers/blogReducer'
 import { loadUser, loginUser, logoutUser } from './reducers/userReducer'
+import Users from './components/Users'
 
 const App = () => {
   const [time, setTime] = useState(null)
@@ -42,24 +44,22 @@ const App = () => {
   const handleCreate = async (title, author, url) => {
     const data = { title, author, url }
     addBlogpostRef.current.toggleVisibility()
-    dispatch(addBlog(data)).then((res) =>
-      handleMessage(`a new blog ${res.title} by ${res.author} added`)
-    )
+    const res = await dispatch(addBlog(data))
+    handleMessage(`a new blog ${res.title} by ${res.author} added`)
   }
 
-  const handleMessage = (message, type = 'success') => {
-    dispatch(setNotification({ message, type }, 5, time)).then((id) =>
-      setTime(id)
-    )
+  const handleMessage = async (message, type = 'success') => {
+    const id = await dispatch(setNotification({ message, type }, 5, time))
+    setTime(id)
   }
 
   const putLike = async (id, blogToUpdate) => {
     dispatch(likeBlog(id, blogToUpdate))
   }
 
-  const removeBlog = async (id) => {
+  const removeBlog = (id) => {
     try {
-      await dispatch(deleteBlog(id))
+      dispatch(deleteBlog(id))
     } catch (err) {
       return handleMessage(err.response.data.error, 'error')
     }
@@ -104,20 +104,32 @@ const App = () => {
         {user.name} logged in
         <button onClick={logout}>log out</button>
       </div>
-      <Togglable buttonLabel="create" ref={addBlogpostRef}>
-        <AddBlogpost handleCreate={handleCreate} />
-      </Togglable>
-      {blogs
-        .sort((a, b) => b.likes - a.likes)
-        .map((blog) => (
-          <Blog
-            key={blog.id}
-            blog={blog}
-            putLike={putLike}
-            removeBlog={removeBlog}
-            isCreator={user.username === blog.user.username}
-          />
-        ))}
+      <div>
+        <Link to="/">home</Link>
+        <Link to="/users">users</Link>
+      </div>
+
+      <Switch>
+        <Route path="/users">
+          <Users />
+        </Route>
+        <Route path="/">
+          <Togglable buttonLabel="create" ref={addBlogpostRef}>
+            <AddBlogpost handleCreate={handleCreate} />
+          </Togglable>
+          {blogs
+            .sort((a, b) => b.likes - a.likes)
+            .map((blog) => (
+              <Blog
+                key={blog.id}
+                blog={blog}
+                putLike={putLike}
+                removeBlog={removeBlog}
+                isCreator={user.username === blog.user.username}
+              />
+            ))}
+        </Route>
+      </Switch>
     </div>
   )
 }
