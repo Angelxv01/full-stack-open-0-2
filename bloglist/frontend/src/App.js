@@ -7,11 +7,12 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import userService from './services/user'
 
-import Blog from './components/Blog'
+// import Blog from './components/Blog'
 import LoginForm from './components/LoginForm'
 import AddBlogpost from './components/AddBlogpost'
 import Message from './components/Message'
 import User from './components/User'
+import BlogPost from './components/BlogPost'
 
 import Togglable from './components/Togglable'
 
@@ -21,7 +22,7 @@ import {
 } from './reducers/notificationReducer'
 import {
   addBlog,
-  deleteBlog,
+  // deleteBlog,
   initBlogs,
   likeBlog
 } from './reducers/blogReducer'
@@ -40,9 +41,14 @@ const App = () => {
   const blogs = useSelector((state) => state.blog)
   const user = useSelector((state) => state.user)
 
-  const match = useRouteMatch('/users/:id')
-  const selectedUser = match
-    ? users.find((obj) => obj.id === match.params.id)
+  const matchUser = useRouteMatch('/users/:id')
+  const selectedUser = matchUser
+    ? users.find((obj) => obj.id === matchUser.params.id)
+    : null
+
+  const matchBlog = useRouteMatch('/blogs/:id')
+  const selectedBlog = matchBlog
+    ? blogs.find((obj) => obj.id === matchBlog.params.id)
     : null
 
   const addBlogpostRef = useRef()
@@ -71,13 +77,13 @@ const App = () => {
     dispatch(likeBlog(id, blogToUpdate))
   }
 
-  const removeBlog = (id) => {
-    try {
-      dispatch(deleteBlog(id))
-    } catch (err) {
-      return handleMessage(err.response.data.error, 'error')
-    }
-  }
+  // const removeBlog = (id) => {
+  //   try {
+  //     dispatch(deleteBlog(id))
+  //   } catch (err) {
+  //     return handleMessage(err.response.data.error, 'error')
+  //   }
+  // }
 
   const logout = () => {
     dispatch(resetNotification())
@@ -127,6 +133,9 @@ const App = () => {
         <Route path="/users/:id">
           <User user={selectedUser} />
         </Route>
+        <Route path="/blogs/:id">
+          <BlogPost blog={selectedBlog} putLike={putLike} />
+        </Route>
         <Route path="/users">
           <Users users={users} />
         </Route>
@@ -137,13 +146,16 @@ const App = () => {
           {blogs
             .sort((a, b) => b.likes - a.likes)
             .map((blog) => (
-              <Blog
-                key={blog.id}
-                blog={blog}
-                putLike={putLike}
-                removeBlog={removeBlog}
-                isCreator={user.username === blog.user.username}
-              />
+              <div key={blog.id}>
+                <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
+              </div>
+              // <Blog
+              //   key={blog.id}
+              //   blog={blog}
+              //   putLike={putLike}
+              //   removeBlog={removeBlog}
+              //   isCreator={user.username === blog.user.username}
+              // />
             ))}
         </Route>
       </Switch>
