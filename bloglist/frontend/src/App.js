@@ -21,7 +21,8 @@ import {
   addBlog,
   // deleteBlog,
   initBlogs,
-  likeBlog
+  likeBlog,
+  commentBlog
 } from './reducers/blogReducer'
 import { loadUser, loginUser } from './reducers/userReducer'
 import Users from './components/Users'
@@ -30,6 +31,7 @@ import Navigation from './components/Navigation'
 const App = () => {
   const [time, setTime] = useState(null)
   const [users, setUsers] = useState([])
+  const [comment, setComment] = useState('')
 
   useEffect(() => {
     userService.getAll().then((res) => setUsers(res))
@@ -57,6 +59,11 @@ const App = () => {
     } catch (error) {
       handleMessage(error.response.data.error, 'error')
     }
+  }
+
+  const addComment = async (id, comment) => {
+    dispatch(commentBlog(id, comment))
+    setComment('')
   }
 
   const handleCreate = async (title, author, url) => {
@@ -120,7 +127,13 @@ const App = () => {
           <User user={selectedUser} />
         </Route>
         <Route path="/blogs/:id">
-          <BlogPost blog={selectedBlog} putLike={putLike} />
+          <BlogPost
+            blog={selectedBlog}
+            putLike={putLike}
+            commentBlog={addComment}
+            comment={comment}
+            setComment={setComment}
+          />
         </Route>
         <Route path="/users">
           <Users users={users} />

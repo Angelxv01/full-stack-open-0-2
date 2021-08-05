@@ -1,6 +1,6 @@
 import React from 'react'
 
-const BlogPost = ({ blog, putLike }) => {
+const BlogPost = ({ blog, putLike, commentBlog, comment, setComment }) => {
   if (!blog) {
     return null
   }
@@ -28,6 +28,7 @@ const BlogPost = ({ blog, putLike }) => {
       </div>
     )
   }
+
   return (
     <div>
       <h1>{blog.title}</h1>
@@ -36,6 +37,16 @@ const BlogPost = ({ blog, putLike }) => {
       </div>
       <div>
         {blog.likes} likes <button onClick={handleLike}>Like</button>
+      </div>
+      <div>
+        <input
+          type="text"
+          value={comment}
+          onChange={({ target }) => setComment(target.value)}
+        />
+        <button onClick={() => commentBlog(blog.id, comment)}>
+          add comment
+        </button>
       </div>
       <div>
         <h3>comments</h3>

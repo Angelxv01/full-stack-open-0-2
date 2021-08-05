@@ -39,14 +39,16 @@ blogsRouter.post('/:id/comment', async (req, res) => {
   const body = req.body
 
   if (!body.comment) {
-    res.status(400).json({ error: 'missing content' })
+    return res.status(400).json({ error: 'missing content' })
   }
 
-  const blog = await Blog.findById(req.params.id)
+  const blog = await Blog.findById(req.params.id).populate('user', {
+    blogs: 0
+  })
   blog.comments = blog.comments.concat(body.comment)
   await blog.save()
 
-  res.json(blog)
+  res.json(blog.toJSON())
 })
 
 blogsRouter.use(userExtractor)
