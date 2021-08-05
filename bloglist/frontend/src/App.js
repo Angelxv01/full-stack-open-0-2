@@ -1,14 +1,17 @@
 import './index.css'
 
 import React, { useState, useEffect, useRef } from 'react'
-import { Switch, Route, Link } from 'react-router-dom'
+import { Switch, Route, Link, useRouteMatch } from 'react-router-dom'
 // import { decode } from 'jsonwebtoken'
 import { useDispatch, useSelector } from 'react-redux'
+
+import userService from './services/user'
 
 import Blog from './components/Blog'
 import LoginForm from './components/LoginForm'
 import AddBlogpost from './components/AddBlogpost'
 import Message from './components/Message'
+import User from './components/User'
 
 import Togglable from './components/Togglable'
 
@@ -27,10 +30,21 @@ import Users from './components/Users'
 
 const App = () => {
   const [time, setTime] = useState(null)
+  const [users, setUsers] = useState([])
+
+  useEffect(() => {
+    userService.getAll().then((res) => setUsers(res))
+  }, [])
 
   const dispatch = useDispatch()
   const blogs = useSelector((state) => state.blog)
   const user = useSelector((state) => state.user)
+
+  const match = useRouteMatch('/users/:id')
+  const selectedUser = match
+    ? users.find((obj) => obj.id === match.params.id)
+    : null
+
   const addBlogpostRef = useRef()
 
   const handleLogin = async (credentials) => {
@@ -110,8 +124,11 @@ const App = () => {
       </div>
 
       <Switch>
+        <Route path="/users/:id">
+          <User user={selectedUser} />
+        </Route>
         <Route path="/users">
-          <Users />
+          <Users users={users} />
         </Route>
         <Route path="/">
           <Togglable buttonLabel="create" ref={addBlogpostRef}>
