@@ -1,19 +1,45 @@
-import React from 'react'
-import { StyledButton, StyledInput, Title } from '../styles'
+import React, { useState } from 'react'
+import { useHistory } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { commentBlog, likeBlog, deleteBlog } from '../reducers/blogReducer'
+import { setNotification } from '../reducers/notificationReducer'
 
-const BlogPost = ({ blog, putLike, commentBlog, comment, setComment }) => {
-  if (!blog) {
-    return null
+import { StyledButton, StyledInput, Title, Flex } from '../styles'
+
+const BlogPost = ({ blog }) => {
+  const [comment, setComment] = useState('')
+  const dispatch = useDispatch()
+  const history = useHistory()
+  const user = useSelector((state) => state.user)
+
+  const addComment = () => {
+    dispatch(commentBlog(blog.id, comment))
+    setComment('')
   }
 
-  const handleLike = () => {
-    // form the data to send and send the request
+  const remove = () => {
+    try {
+      dispatch(deleteBlog(blog.id))
+    } catch (err) {
+      dispatch(
+        setNotification({ message: err.response.data.error, type: 'error' }, 5)
+      )
+    }
+
+    history.push('/')
+  }
+
+  const putLike = () => {
     const data = {
       ...blog,
       user: blog.user.id,
       likes: blog.likes + 1
     }
-    putLike(blog.id, data)
+    dispatch(likeBlog(blog.id, data))
+  }
+
+  if (!blog) {
+    return null
   }
 
   const Comments = () => {
@@ -32,15 +58,20 @@ const BlogPost = ({ blog, putLike, commentBlog, comment, setComment }) => {
 
   return (
     <div>
-      <Title size={2} color={'#0F3325'}>
-        {blog.title}
-      </Title>
+      <Flex bcgColor={'white'}>
+        <Title size={2} color={'#0F3325'}>
+          {blog.title}
+        </Title>
+        {user.username === blog.user.username && (
+          <StyledButton onClick={remove}>delete</StyledButton>
+        )}
+      </Flex>
       <div>
         <a href={blog.url}>link</a>
       </div>
       <div>
-        {blog.likes} likes{' '}
-        <StyledButton secondary onClick={handleLike}>
+        {blog.likes} likes
+        <StyledButton secondary onClick={putLike}>
           Like
         </StyledButton>
       </div>
@@ -52,9 +83,7 @@ const BlogPost = ({ blog, putLike, commentBlog, comment, setComment }) => {
             onChange={({ target }) => setComment(target.value)}
           />
         </StyledInput>
-        <StyledButton onClick={() => commentBlog(blog.id, comment)}>
-          add comment
-        </StyledButton>
+        <StyledButton onClick={addComment}>add comment</StyledButton>
       </div>
       <div>
         <Title size={1} color={'#0F3325'} capitalize>

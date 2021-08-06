@@ -1,19 +1,30 @@
 import React, { useState } from 'react'
-import PropTypes from 'prop-types'
+import { useDispatch } from 'react-redux'
 import { StyledButton, Grid, StyledInput } from '../styles'
+import { addBlog } from '../reducers/blogReducer'
+import { setNotification } from '../reducers/notificationReducer'
+import { loadUsers } from '../reducers/usersReducer'
 
-const AddBlogPost = ({ handleCreate }) => {
-  const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
-  const [url, setUrl] = useState('')
+const AddBlogPost = ({ toggle }) => {
+  const emptyState = { title: '', author: '', url: '' }
+  const [blog, setBlog] = useState(emptyState)
+  const dispatch = useDispatch()
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    handleCreate(title, author, url)
-
-    setAuthor('')
-    setTitle('')
-    setUrl('')
+  const createBlog = () => {
+    dispatch(addBlog(blog)).then((res) => {
+      dispatch(
+        setNotification(
+          {
+            message: `a new blog ${res.title} by ${res.author} added`,
+            type: 'success'
+          },
+          5
+        )
+      )
+    })
+    dispatch(loadUsers())
+    setBlog(emptyState)
+    toggle.current.toggleVisibility()
   }
 
   return (
@@ -24,8 +35,8 @@ const AddBlogPost = ({ handleCreate }) => {
           <input
             id="title"
             type="text"
-            value={title}
-            onChange={({ target }) => setTitle(target.value)}
+            value={blog.title}
+            onChange={({ target }) => setBlog({ ...blog, title: target.value })}
           />
         </StyledInput>
         <StyledInput>
@@ -33,8 +44,10 @@ const AddBlogPost = ({ handleCreate }) => {
           <input
             id="author"
             type="text"
-            value={author}
-            onChange={({ target }) => setAuthor(target.value)}
+            value={blog.author}
+            onChange={({ target }) =>
+              setBlog({ ...blog, author: target.value })
+            }
           />
         </StyledInput>
         <StyledInput>
@@ -42,18 +55,14 @@ const AddBlogPost = ({ handleCreate }) => {
           <input
             id="url"
             type="text"
-            value={url}
-            onChange={({ target }) => setUrl(target.value)}
+            value={blog.url}
+            onChange={({ target }) => setBlog({ ...blog, url: target.value })}
           />
         </StyledInput>
       </Grid>
-      <StyledButton onClick={handleSubmit}>Create</StyledButton>
+      <StyledButton onClick={createBlog}>Create</StyledButton>
     </div>
   )
-}
-
-AddBlogPost.propTypes = {
-  handleCreate: PropTypes.func.isRequired
 }
 
 export default AddBlogPost
