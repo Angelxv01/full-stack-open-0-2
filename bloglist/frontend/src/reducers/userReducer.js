@@ -19,7 +19,9 @@ const reducer = (state = null, action) => {
 export const loadUser = () => {
   return (dispatch) => {
     const user = loadState('loggedUser')
-    blogsService.setToken(user.token)
+    if (user) {
+      blogsService.setToken(user.token)
+    }
     dispatch({ type: 'LOAD_USER', data: user })
   }
 }
