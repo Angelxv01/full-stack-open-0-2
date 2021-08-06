@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { StyledLink } from '../styles'
 
 const Users = ({ users }) => {
   return (
@@ -15,7 +15,9 @@ const Users = ({ users }) => {
             return (
               <tr key={user.id}>
                 <td>
-                  <Link to={`/users/${user.id}`}>{user.username}</Link>
+                  <StyledLink to={`/users/${user.id}`}>
+                    {user.username}
+                  </StyledLink>
                 </td>
                 <td>{user.blogs.length}</td>
               </tr>

@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
+import { StyledButton, Grid, StyledInput } from '../styles'
 
 const LoginForm = ({ handleLogin }) => {
   const [username, setUsername] = useState('')
@@ -12,26 +13,29 @@ const LoginForm = ({ handleLogin }) => {
     setPassword('')
   }
   return (
-    <form onSubmit={login}>
-      <div>
-        username
-        <input
-          id="username"
-          value={username}
-          onChange={({ target }) => setUsername(target.value)}
-        />
-      </div>
-      <div>
-        password
-        <input
-          id="password"
-          type="password"
-          value={password}
-          onChange={({ target }) => setPassword(target.value)}
-        />
-      </div>
-      <button type="submit">login</button>
-    </form>
+    <div>
+      <Grid></Grid>
+      <Grid>
+        <StyledInput>
+          username
+          <input
+            id="username"
+            value={username}
+            onChange={({ target }) => setUsername(target.value)}
+          />
+        </StyledInput>
+        <StyledInput>
+          password
+          <input
+            id="password"
+            type="password"
+            value={password}
+            onChange={({ target }) => setPassword(target.value)}
+          />
+        </StyledInput>
+      </Grid>
+      <StyledButton onClick={login}>login</StyledButton>
+    </div>
   )
 }
 

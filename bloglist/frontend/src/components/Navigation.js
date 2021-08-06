@@ -1,9 +1,16 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
 
 import { useSelector, useDispatch } from 'react-redux'
 import { resetNotification } from '../reducers/notificationReducer'
 import { logoutUser } from '../reducers/userReducer'
+
+import {
+  Flex,
+  StyledButton,
+  StyledLink,
+  StyledDiv,
+  CenterContainer
+} from '../styles'
 
 const Navigation = () => {
   const dispatch = useDispatch()
@@ -15,19 +22,16 @@ const Navigation = () => {
 
   const user = useSelector((state) => state.user)
   return (
-    <div>
-      <Link to="/" style={{ paddingRight: '0.5em' }}>
-        home
-      </Link>
-
-      <Link to="/users" style={{ paddingRight: '0.5em' }}>
-        users
-      </Link>
-      <span style={{ paddingRight: '0.5em' }}>{user.name} logged in</span>
-      <button onClick={logout} style={{ paddingRight: '0.5em' }}>
-        log out
-      </button>
-    </div>
+    <Flex bcgColor={'#e9fce9'}>
+      <CenterContainer>
+        <StyledLink to="/">home</StyledLink>
+        <StyledLink to="/users">users</StyledLink>
+      </CenterContainer>
+      <CenterContainer>
+        <StyledDiv>{user.name} logged in</StyledDiv>
+        <StyledButton onClick={logout}>log out</StyledButton>
+      </CenterContainer>
+    </Flex>
   )
 }
 

@@ -1,7 +1,7 @@
 import './index.css'
 
 import React, { useState, useEffect, useRef } from 'react'
-import { Switch, Route, Link, useRouteMatch } from 'react-router-dom'
+import { Switch, Route, useRouteMatch } from 'react-router-dom'
 // import { decode } from 'jsonwebtoken'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -13,6 +13,8 @@ import AddBlogpost from './components/AddBlogpost'
 import Message from './components/Message'
 import User from './components/User'
 import BlogPost from './components/BlogPost'
+import Users from './components/Users'
+import Navigation from './components/Navigation'
 
 import Togglable from './components/Togglable'
 
@@ -25,8 +27,7 @@ import {
   commentBlog
 } from './reducers/blogReducer'
 import { loadUser, loginUser } from './reducers/userReducer'
-import Users from './components/Users'
-import Navigation from './components/Navigation'
+import { Entry, Title } from './styles'
 
 const App = () => {
   const [time, setTime] = useState(null)
@@ -119,9 +120,7 @@ const App = () => {
   return (
     <div>
       <Navigation />
-      <h2>blogs</h2>
       <Message />
-
       <Switch>
         <Route path="/users/:id">
           <User user={selectedUser} />
@@ -139,15 +138,18 @@ const App = () => {
           <Users users={users} />
         </Route>
         <Route path="/">
+          <Title size={2} color={'#0F3325'}>
+            Blogs
+          </Title>
           <Togglable buttonLabel="create" ref={addBlogpostRef}>
             <AddBlogpost handleCreate={handleCreate} />
           </Togglable>
           {blogs
             .sort((a, b) => b.likes - a.likes)
             .map((blog) => (
-              <div key={blog.id}>
-                <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
-              </div>
+              <Entry to={`/blogs/${blog.id}`} key={blog.id}>
+                {blog.title}
+              </Entry>
               // <Blog
               //   key={blog.id}
               //   blog={blog}

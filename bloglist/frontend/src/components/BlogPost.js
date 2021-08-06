@@ -1,4 +1,5 @@
 import React from 'react'
+import { StyledButton, StyledInput, Title } from '../styles'
 
 const BlogPost = ({ blog, putLike, commentBlog, comment, setComment }) => {
   if (!blog) {
@@ -31,25 +32,34 @@ const BlogPost = ({ blog, putLike, commentBlog, comment, setComment }) => {
 
   return (
     <div>
-      <h1>{blog.title}</h1>
+      <Title size={2} color={'#0F3325'}>
+        {blog.title}
+      </Title>
       <div>
-        link <a href={blog.url}>{blog.url}</a>
+        <a href={blog.url}>link</a>
       </div>
       <div>
-        {blog.likes} likes <button onClick={handleLike}>Like</button>
+        {blog.likes} likes{' '}
+        <StyledButton secondary onClick={handleLike}>
+          Like
+        </StyledButton>
       </div>
       <div>
-        <input
-          type="text"
-          value={comment}
-          onChange={({ target }) => setComment(target.value)}
-        />
-        <button onClick={() => commentBlog(blog.id, comment)}>
+        <StyledInput>
+          <input
+            type="text"
+            value={comment}
+            onChange={({ target }) => setComment(target.value)}
+          />
+        </StyledInput>
+        <StyledButton onClick={() => commentBlog(blog.id, comment)}>
           add comment
-        </button>
+        </StyledButton>
       </div>
       <div>
-        <h3>comments</h3>
+        <Title size={1} color={'#0F3325'} capitalize>
+          comments
+        </Title>
         {blog.comments ? <Comments /> : 'no comments yet'}
       </div>
       <div>added by {blog.user.name}</div>
