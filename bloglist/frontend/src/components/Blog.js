@@ -42,7 +42,6 @@ const Blog = ({ blog, putLike, removeBlog, isCreator }) => {
       <button className="toggleShow" onClick={() => setShow(!show)}>
         {show ? 'hide' : 'show'}
       </button>
-      {/* <button onClick={() => console.log(blog)}>info</button> */}
       <div style={showWhenVisible} className="additional">
         <div>{blog.url}</div>
         <div>

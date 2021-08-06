@@ -2,7 +2,6 @@ import './index.css'
 
 import React, { useState, useEffect, useRef } from 'react'
 import { Switch, Route, useRouteMatch } from 'react-router-dom'
-// import { decode } from 'jsonwebtoken'
 import { useDispatch, useSelector } from 'react-redux'
 
 import userService from './services/user'
@@ -97,14 +96,6 @@ const App = () => {
 
   useEffect(() => {
     dispatch(loadUser())
-    // const loggedUserJSON = window.localStorage.getItem('loggedUser')
-    // if (loggedUserJSON) {
-    //   const user = JSON.parse(loggedUserJSON)
-    //   blogService.setToken(user.token)
-    //   const { exp } = decode(user.token)
-    //   const expired = Date.now() >= exp * 1000 - 60000
-    //   expired ? logout() : setUser(user)
-    // }
   }, [])
 
   if (user === null) {

@@ -14,7 +14,6 @@ const LoginForm = ({ handleLogin }) => {
   }
   return (
     <div>
-      <Grid></Grid>
       <Grid>
         <StyledInput>
           username
