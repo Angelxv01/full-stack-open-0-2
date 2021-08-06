@@ -3,11 +3,13 @@ import { useDispatch } from 'react-redux'
 import { StyledButton, Grid, StyledInput } from '../styles'
 import { loginUser } from '../reducers/userReducer'
 import { setNotification } from '../reducers/notificationReducer'
+import { useHistory } from 'react-router-dom'
 
 const LoginForm = () => {
   const empty = { username: '', password: '' }
   const [credentials, setCredentials] = useState(empty)
   const dispatch = useDispatch()
+  const history = useHistory()
 
   const login = () => {
     // handleLogin({ username, password })
@@ -19,7 +21,9 @@ const LoginForm = () => {
       )
     }
     setCredentials(empty)
+    history.push('/')
   }
+
   return (
     <div>
       <Grid>

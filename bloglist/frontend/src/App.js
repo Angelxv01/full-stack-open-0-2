@@ -40,13 +40,7 @@ const App = () => {
 
   useEffect(() => {
     dispatch(initBlogs())
-  }, [])
-
-  useEffect(() => {
     dispatch(loadUsers())
-  }, [])
-
-  useEffect(() => {
     dispatch(loadUser())
   }, [])
 
